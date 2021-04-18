@@ -3,6 +3,15 @@
 #include "glut.h"
 #include <vector>
 
+#include<windows.graphics.h>
+
+typedef struct _RGBColor {
+	float r;
+	float g;
+	float b;
+
+
+}RGBColor;
 const int id_Oval = 1;
 const int id_HinhTron = 11;
 const int id_Ellipse = 12;

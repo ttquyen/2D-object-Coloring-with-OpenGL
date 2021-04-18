@@ -26,7 +26,7 @@ Shape::Shape() {
 void Line::draw()
 {
     cout << "ve duong thang na" << endl;
-    glColor3f(1, 0, 0);
+    //glColor3f(1, 0, 0);
     glBegin(GL_LINES);
     glVertex2f(pstart.x, pstart.y);
     glVertex2f(pend.x, pend.y);
@@ -36,7 +36,7 @@ void Line::draw()
 void HinhTron::draw()
 {
     cout << "ve hinh tron na" << endl;
-    glColor3f(1, 0, 0);
+    //glColor3f(1, 0, 0);
     GLfloat xi, yi, theta = 0;
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y))/2;
     int xa = (pstart.x + pend.x) / 2;
@@ -85,7 +85,7 @@ void TGVuongCan::draw() {
 }
 
 void TGDeu::draw() {
-    glColor3f(1, 0, 0);
+    //glColor3f(1, 0, 0);
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
 
     glBegin(GL_POLYGON);
@@ -95,7 +95,7 @@ void TGDeu::draw() {
     glEnd();
 }
 void HinhChuNhat::draw() {
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x, pend.y);
     glVertex2f(pstart.x, pend.y);
@@ -104,7 +104,7 @@ void HinhChuNhat::draw() {
     glEnd();
 }
 void HinhVuong::draw() {
-    glColor3f(1, 0, 0);
+    //glColor3f(1, 0, 0);
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
 
     glBegin(GL_POLYGON);
@@ -117,7 +117,7 @@ void HinhVuong::draw() {
 }
 
 void DauTru::draw() {
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x, pend.y);
     glVertex2f(pstart.x, pend.y);
@@ -130,7 +130,7 @@ void DauCong::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit= radius/3;
 
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x, pend.y - unit);
     glVertex2f(pend.x, pend.y - 2 * unit);
@@ -150,7 +150,7 @@ void DauNhan::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 4;
 
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x, pend.y - unit);
     glVertex2f(pend.x-unit, pend.y - 2 * unit);
@@ -171,7 +171,7 @@ void DauNhan::draw() {
 }
 
 void DauChia::draw() {
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 4;
 
@@ -218,7 +218,7 @@ void NgoiSao::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 6;
 
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x-0.6*unit, pend.y-0.2*unit);
 
@@ -246,7 +246,7 @@ void MuiTen::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 3;
 
-    glColor3f(1, 1, 0);
+    //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
     glVertex2f(pend.x, pend.y - 1.5 * unit);
     glVertex2f(pend.x-unit, pend.y - 3 * unit);
@@ -270,7 +270,6 @@ void menu(int num) {
     glutPostRedisplay();
 }
 void createMenu(void) {
-    //Layout (tang 3)
     //Oval
     submenu_oval_id = glutCreateMenu(menu);
     glutAddMenuEntry("Hinh tron", id_HinhTron);
@@ -320,6 +319,56 @@ void createMenu(void) {
     glutAddSubMenu("Draw", submenu_id);
     glutAddMenuEntry("Quit", 0);     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
+RGBColor getPixel(int x, int y) {
+    unsigned char* ptr = new unsigned char[3];
+    glReadPixels(x, 500 - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, ptr);
+    RGBColor color;
+    color.r = ptr[0];
+    color.g = ptr[1];
+    color.b = ptr[2];
+    return color;
+}
+
+void putPixel(int x, int y, RGBColor color) {
+    unsigned char* ptr = new unsigned char[3];
+    ptr[0] = color.r;
+    ptr[1] = color.g;
+    ptr[2] = color.b;
+    glRasterPos2i(x, y);
+    glDrawPixels(1, 1, GL_RGB, GL_UNSIGNED_BYTE, ptr);
+    glFlush();
+}
+
+bool isSameColor(RGBColor a, RGBColor b) {
+    if (a.r == b.r && a.g == b.g && a.b == b.b)
+        return true;
+    return false;
+}
+void boundaryFill(int x, int y, RGBColor fill_color, RGBColor boundary_color)
+{
+    RGBColor curr = getPixel(x, y);
+    if (!isSameColor(curr, fill_color) && !isSameColor(curr, boundary_color))
+    {
+        putPixel(x, y, fill_color);
+        boundaryFill(x + 1, y, fill_color, boundary_color);
+        boundaryFill(x, y + 1, fill_color, boundary_color);
+        boundaryFill(x - 1, y, fill_color, boundary_color);
+        boundaryFill(x, y - 1, fill_color, boundary_color);
+    }
+}
+
+void floodFill(int x, int y, RGBColor oldcolor, RGBColor newcolor)
+{
+    RGBColor curr = getPixel(x, y);
+    if (isSameColor(curr, oldcolor))
+    {
+        putPixel(x, y, newcolor);
+        floodFill(x + 1, y, oldcolor, newcolor);
+        floodFill(x, y + 1, oldcolor, newcolor);
+        floodFill(x - 1, y, oldcolor, newcolor);
+        floodFill(x, y - 1, oldcolor, newcolor);
+    }
+}
 
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT);   if (value == 1) {
@@ -329,10 +378,6 @@ void display(void) {
     for (int i = 0; i < listOfShape.size(); i++) {
         listOfShape[i]->draw();
     }
-
-    /*Line* tmpLine = new Line();
-    Shape* obj = tmpLine;
-    obj->draw();*/
     glFlush();
     //glutPostRedisplay();
 }
@@ -347,12 +392,26 @@ void mouse(int button, int state, int x, int y) {
         if (state == GLUT_DOWN) {
             startPoint.x = x;
             startPoint.y = y;
-            cout << startPoint.x << "  " << startPoint.y << endl;
+
+           
+            //cout << startPoint.x << "  " << startPoint.y << endl;
         }
         if (state == GLUT_UP) {
             endPoint.x = x;
             endPoint.y = y;
-            cout << endPoint.x << "  " << endPoint.y << endl;
+            //cout << endPoint.x << "  " << endPoint.y << endl;
+            if (startPoint.x == endPoint.x && startPoint.y == endPoint.y) {
+                RGBColor B_Color;
+                B_Color.r = 1;
+                B_Color.g = 1;
+                B_Color.b = 1;
+                RGBColor F_Color;
+                F_Color.r = 0.75;
+                F_Color.g = 1;
+                F_Color.b = 0;
+                cout << "vo day" << endl;
+                boundaryFill(x, y, F_Color, B_Color);
+            }
            // Shape shp;
             switch (value) {
             case id_HinhTron: 
@@ -468,68 +527,29 @@ void mouse(int button, int state, int x, int y) {
                 listOfShape.push_back(obj);
             }
             break;
-      
             }
-
-
-
         }
-
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && startPoint.x==endPoint.x &&startPoint.y==endPoint.y) {
+            //RGBColor B_Color;
+            //B_Color.r= 1;
+            //B_Color.g = 0;
+            //B_Color.b = 0;
+            RGBColor O_Color;
+            O_Color.r = 0;
+            O_Color.g = 0;
+            O_Color.b = 0;
+            cout << "vo day" << endl;
+            RGBColor F_Color;
+            F_Color.r = 1;
+            F_Color.g = 1;
+            F_Color.b = 0;
+            //boundaryFill(x, y, F_Color, B_Color);
+            floodFill(x, y, O_Color, F_Color);
+        }
     }
-
-    cout << listOfShape.size() << endl;;
-
-  
-    /* else if (value == id_NguGiacDeu) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_LucGiacDeu) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_NgoiSao) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_MuiTen) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_DauCong) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_DauTru) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_DauNhan) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }
-     else if (value == id_DauChia) {
-     glPushMatrix();
-     glColor3d(0.0, 0.0, 1.0);
-     glutWireTorus(0.3, 0.6, 100, 100);
-     glPopMatrix();
-     }*/
     glutPostRedisplay();
 };
+
 void motion(int x, int y) {
     endPoint.x = x;
     endPoint.y = y;
@@ -538,9 +558,9 @@ void motion(int x, int y) {
 void init(void) {
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(0.0, 500, 500, 0);
-    glColor3f(0, 0, 1); // blue
-    glPointSize(5); //size
+    gluOrtho2D(0.0, 500, 500, 0.0);
+    glColor3f(1, 1, 1); // blue
+    glPointSize(2); //size
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
