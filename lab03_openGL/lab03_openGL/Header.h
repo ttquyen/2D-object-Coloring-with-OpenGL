@@ -52,35 +52,42 @@ const RGBColor F_Color_Yellow = { 1,1,0 };
 using namespace std;
 
 struct Point {
-	int x, y;
+	float x, y;
 };
-
 class Shape {
 protected:
 	Point pstart;
 	Point pend;
+	Point center;
+	vector<Point> vertice;
+	int type;
 	//int button, state;
 public:
 	Shape();
-	/*Point getStart() {
-		Point tmpX;
-		tmpX.x = pstart.x;
-		tmpX.x = pstart.x;
-		return tmpX;
-	}
-	Point getEnd() {
-		Point tmpX;
-		tmpX.x = pend.x;
-		tmpX.x = pend.x;
-		return tmpX;
-	}*/
-	//void setPoints(Point a, Point b);
 	virtual void draw()=0;
+	int getType() {
+		return type;
+	}
+	Point getEndPoint() {
+		return pend;
+	}
+	Point getStartPoint() {
+		return pstart;
+	}
+	Point getCenter() {
+		return center;
+	}
+	vector<Point> getVertice() {
+		return vertice;
+	}
+
+	//vector<Point> getIntersection(float y, float xMin, float xMax);
+
 };
-
 vector<Shape*> listOfShape;
-
-
+float distance(Point a, Point b) {
+	return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
 class Line : public Shape {
 public:
 	Line() :Shape() {};
@@ -90,13 +97,11 @@ class DaGiacDeu : public Shape {
 public:
 	DaGiacDeu() :Shape() {};
 };
-
 class NguGiacDeu : public DaGiacDeu {
 public:
 	NguGiacDeu() :DaGiacDeu() {};
 	void draw();
 };
-
 class LucGiacDeu : public DaGiacDeu {
 public:
 	LucGiacDeu() :DaGiacDeu() {};
@@ -106,19 +111,16 @@ class Dau : public Shape {
 public:
 	Dau() :Shape() {};
 };
-
 class DauCong : public Dau {
 public:
 	DauCong() :Dau() {};
 	void draw();
 };
-
 class DauTru : public Dau {
 public:
 	DauTru() :Dau() {};
 	void draw();
 };
-
 class DauNhan : public Dau {
 public:
 	DauNhan() :Dau() {};
@@ -143,58 +145,55 @@ public:
 	NgoiSao() :HinhKhac() {};
 	void draw();
 };
-
 class Oval :public Shape {
 public:
 	Oval() :Shape() {};
 };
-
-
 class HinhTron : public Oval {
 public:
 	HinhTron() :Oval() {};
 	void draw();
 
 };
-
 class HinhEllipse : public Oval {
 public:
 	HinhEllipse() :Oval() {};
 	void draw();
 };
-
 class TamGiac : public Shape {
 public:
 	TamGiac() :Shape() {};
 };
-
-
 class TGVuongCan : public TamGiac {
 public:
 	TGVuongCan() :TamGiac() {};
 	void draw();
 };
-
 class TGDeu : public TamGiac {
 public:
 	TGDeu() :TamGiac() {};
 	void draw();
 };
-
 class TuGiac : public Shape {
 public:
 	TuGiac() :Shape() {};
 };
-
 class HinhChuNhat : public TuGiac {
 public:
 	HinhChuNhat() :TuGiac() {};
 	void draw();
 };
-
 class HinhVuong : public TuGiac {
 public:
 	HinhVuong() :TuGiac() {};
 	void draw();
 };
-//void storeEdgeInTable(int, int, int, int);
+RGBColor getPixel(int x, int y);
+void putPixel(int x, int y, RGBColor color);
+bool isSameColor(RGBColor a, RGBColor b);
+void boundaryFill(int, int, RGBColor, RGBColor);
+void floodFill(int x, int y, RGBColor oldcolor, RGBColor newcolor);
+//Shape* getShape();
+//int sortIntersection(vector<Point>& listPoint);
+//Point getIntersectionFromLine(Point start1, Point end1, Point start2, Point end2);
+

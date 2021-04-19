@@ -23,49 +23,48 @@ Shape::Shape() {
     pstart.y = startPoint.y;
     pend.x = endPoint.x;
     pend.y = endPoint.y;
+    type = value;
+    center.x = (pstart.x + pend.x) / 2;
+    center.y = (pstart.y + pend.y) / 2;
 }
 void Line::draw()
 {
-    cout << "ve duong thang na" << endl;
     glBegin(GL_LINES);
     glVertex2f(pstart.x, pstart.y);
     glVertex2f(pend.x, pend.y);
     glEnd();
-
 }
 void HinhTron::draw()
 {
-    cout << "ve hinh tron na" << endl;
     GLfloat xi, yi, theta = 0;
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y))/2;
-    int xa = (pstart.x + pend.x) / 2;
-    int ya = (pstart.y + pend.y) / 2;
-
     int COUNT;
-    for (COUNT = 1; COUNT <= 10000; COUNT++) {
-        theta = theta + 0.001;
-        xi = xa + radius * cos(theta);
-        yi = ya + radius * sin(theta);
+    for (COUNT = 1; COUNT <= 1000; COUNT++) {
+        theta = theta + 0.01;
+        xi = center.x + radius * cos(theta);
+        yi = center.y + radius * sin(theta);
         glBegin(GL_POINTS);
         glVertex2f(xi, yi);
         glEnd();
+        Point tmp = { xi, yi };
+        vertice.push_back(tmp);
     }
 }
 void HinhEllipse::draw() {
     float xi, yi, theta = 0;
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y)) / 2;
-    int xa = (pstart.x + pend.x) / 2;
-    int ya = (pstart.y + pend.y) / 2;
-    float rb = 50; 
+    float rb = 20; 
 
     int COUNT;
-    for (COUNT = 1; COUNT <= 10000; COUNT++) {
-        theta = theta + 0.001;
-        xi = xa + radius * cos(theta);
-        yi = ya + rb * sin(theta);
+    for (COUNT = 1; COUNT <= 1000; COUNT++) {
+        theta = theta + 0.01;
+        xi = center.x + radius * cos(theta);
+        yi = center.y + rb * sin(theta);
         glBegin(GL_POINTS);
         glVertex2f(xi, yi);
         glEnd();
+        Point tmp = { xi, yi };
+        vertice.push_back(tmp);
     }
 }
 void TGVuongCan::draw() {
@@ -73,16 +72,18 @@ void TGVuongCan::draw() {
 
         glBegin(GL_POLYGON);
         glVertex2f(pend.x, pend.y);
-        glVertex2f(pend.x-radius, pend.y);
-        glVertex2f(pend.x - radius, pend.y-radius);
-        /*storeEdgeInTable(pend.x, pend.y, pend.x - radius, pend.y);
-        storeEdgeInTable( pend.x - radius, pend.y, pend.x - radius, pend.y - radius);
-        storeEdgeInTable(pend.x - radius, pend.y - radius, pend.x, pend.y);
-*/
+        Point tmp = { pend.x, pend.y };
+        vertice.push_back(tmp);
 
+        glVertex2f(pend.x-radius, pend.y);
+        tmp = { pend.x - radius, pend.y };
+        vertice.push_back(tmp);
+
+        glVertex2f(pend.x - radius, pend.y-radius);
+        tmp = { pend.x - radius, pend.y - radius };
+        vertice.push_back(tmp);
         glEnd();
 }
-
 void TGDeu::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
 
@@ -113,7 +114,6 @@ void HinhVuong::draw() {
 
     glEnd();
 }
-
 void DauTru::draw() {
     //glColor3f(1, 1, 0);
     glBegin(GL_POLYGON);
@@ -123,7 +123,6 @@ void DauTru::draw() {
     glVertex2f(pend.x, pstart.y);
     glEnd();
 }
-
 void DauCong::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit= radius/3;
@@ -167,7 +166,6 @@ void DauNhan::draw() {
 
     glEnd();
 }
-
 void DauChia::draw() {
     //glColor3f(1, 1, 0);
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
@@ -182,7 +180,6 @@ void DauChia::draw() {
 
     glEnd();
 }
-
 void NguGiacDeu::draw() {
     float angleIncrement = 360.0f / 5;  // n is 5 in your case
     angleIncrement *= 3.1416 / 180.0f;    // convert degrees to radians
@@ -211,7 +208,6 @@ void LucGiacDeu::draw() {
     }
     glEnd();
 }
-
 void NgoiSao::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 6;
@@ -229,23 +225,10 @@ void NgoiSao::draw() {
     glVertex2f(pend.x - 5.6 * unit, pend.y -0.2*unit);
     glVertex2f(pend.x - 3 * unit, pend.y - 1.5*unit);
 
-    /*storeEdgeInTable(pend.x - 0.6 * unit, pend.y - 0.2 * unit,pend.x - 1.5 * unit, pend.y - 2.5 * unit);
-    storeEdgeInTable(pend.x - 1.5 * unit, pend.y - 2.5 * unit,pend.x, pend.y - 4 * unit);
-    storeEdgeInTable(pend.x, pend.y - 4 * unit,pend.x - 2 * unit, pend.y - 4 * unit);
-    storeEdgeInTable(pend.x - 2 * unit, pend.y - 4 * unit,pend.x - 3 * unit, pend.y - 6 * unit);
-    storeEdgeInTable(pend.x - 3 * unit, pend.y - 6 * unit,pend.x - 4 * unit, pend.y - 4 * unit);
-    storeEdgeInTable(pend.x - 4 * unit, pend.y - 4 * unit,pend.x - 6 * unit, pend.y - 4 * unit);
-    storeEdgeInTable(pend.x - 6 * unit, pend.y - 4 * unit,pend.x - 4.5 * unit, pend.y - 2.5 * unit);
-    storeEdgeInTable(pend.x - 4.5 * unit, pend.y - 2.5 * unit,pend.x - 5.6 * unit, pend.y - 0.2 * unit);
-    storeEdgeInTable(pend.x - 5.6 * unit, pend.y - 0.2 * unit,pend.x - 3 * unit, pend.y - 1.5 * unit);
-    storeEdgeInTable(pend.x - 3 * unit, pend.y - 1.5 * unit, pend.x - 0.6 * unit, pend.y - 0.2 * unit);*/
-
-
 
 
     glEnd();
 }
-
 void MuiTen::draw() {
     float radius = sqrt((pstart.x - pend.x) * (pstart.x - pend.x) + (pstart.y - pend.y) * (pstart.y - pend.y));
     float unit = radius / 3;
@@ -261,8 +244,6 @@ void MuiTen::draw() {
     glVertex2f(pend.x - unit, pend.y);
     glEnd();
 }
-
-
 void menu(int num) {
     if (num == 0) {
         glutDestroyWindow(window);
@@ -341,7 +322,6 @@ RGBColor getPixel(int x, int y) {
     color.b = ptr[2];
     return color;
 }
-
 void putPixel(int x, int y, RGBColor color) {
     float* ptr = new float[3];
     ptr[0] = color.r;
@@ -351,7 +331,6 @@ void putPixel(int x, int y, RGBColor color) {
     glDrawPixels(1, 1, GL_RGB, GL_FLOAT, ptr);
     glFlush();
 }
-
 bool isSameColor(RGBColor a, RGBColor b) {
     if (abs(a.r - b.r)<0.01 && abs(a.g - b.g) < 0.01 && abs(a.b - b.b) < 0.01)
         return true;
@@ -372,7 +351,6 @@ void boundaryFill(int x, int y, RGBColor fill_color, RGBColor boundary_color)
     else
         cout << "huhu" << endl;
 }
-
 void floodFill(int x, int y, RGBColor oldcolor, RGBColor newcolor)
 {
     RGBColor curr = getPixel(x, y);
@@ -385,320 +363,145 @@ void floodFill(int x, int y, RGBColor oldcolor, RGBColor newcolor)
         floodFill(x, y - 1, oldcolor, newcolor);
     }
 }
-
-//
-//typedef struct edgebucket
-//{
-//    int ymax;   //max y-coordinate of edge
-//    float xofymin;  //x-coordinate of lowest edge point updated only in aet
-//    float slopeinverse;
-//}EdgeBucket;
-//
-//typedef struct edgetabletup
-//{
-//
-//    int countEdgeBucket;    //no. of edgebuckets
-//    EdgeBucket buckets[maxVer];
-//}EdgeTableTuple;
-//
-//EdgeTableTuple EdgeTable[500], ActiveEdgeTuple;
-//
-//
-//// Scanline Function
-//void initEdgeTable()
-//{
-//    int i;
-//    for (i = 0; i < 500; i++)
-//    {
-//        EdgeTable[i].countEdgeBucket = 0;
-//    }
-//
-//    ActiveEdgeTuple.countEdgeBucket = 0;
-//}
-
-//
-//void printTuple(EdgeTableTuple* tup)
-//{
-//    int j;
-//
-//    if (tup->countEdgeBucket)
-//        printf("\nCount %d-----\n", tup->countEdgeBucket);
-//
-//    for (j = 0; j < tup->countEdgeBucket; j++)
-//    {
-//        printf(" %d+%.2f+%.2f",
-//            tup->buckets[j].ymax, tup->buckets[j].xofymin, tup->buckets[j].slopeinverse);
-//    }
-//}
-//
-//void printTable()
-//{
-//    int i, j;
-//
-//    for (i = 0; i < 500; i++)
-//    {
-//        if (EdgeTable[i].countEdgeBucket)
-//            printf("\nScanline %d", i);
-//
-//        printTuple(&EdgeTable[i]);
-//    }
-//}
-
-//
-///* Function to sort an array using insertion sort*/
-//void insertionSort(EdgeTableTuple* ett)
-//{
-//    int i, j;
-//    EdgeBucket temp;
-//
-//    for (i = 1; i < ett->countEdgeBucket; i++)
-//    {
-//        temp.ymax = ett->buckets[i].ymax;
-//        temp.xofymin = ett->buckets[i].xofymin;
-//        temp.slopeinverse = ett->buckets[i].slopeinverse;
-//        j = i - 1;
-//
-//        while ((temp.xofymin < ett->buckets[j].xofymin) && (j >= 0))
-//        {
-//            ett->buckets[j + 1].ymax = ett->buckets[j].ymax;
-//            ett->buckets[j + 1].xofymin = ett->buckets[j].xofymin;
-//            ett->buckets[j + 1].slopeinverse = ett->buckets[j].slopeinverse;
-//            j = j - 1;
+//Shape* getShape() {
+//    float min = 1000;
+//    Shape* res = nullptr;
+//    for (Shape* sh : listOfShape) {
+//        float tmp = distance(startPoint, sh->getCenter());
+//        if (tmp <= min) {
+//               min = tmp;
+//                res = sh;
 //        }
-//        ett->buckets[j + 1].ymax = temp.ymax;
-//        ett->buckets[j + 1].xofymin = temp.xofymin;
-//        ett->buckets[j + 1].slopeinverse = temp.slopeinverse;
 //    }
+//    return res;
 //}
-//
-//
-//void storeEdgeInTuple(EdgeTableTuple* receiver, int ym, int xm, float slopInv)
-//{
-//    // both used for edgetable and active edge table..
-//    // The edge tuple sorted in increasing ymax and x of the lower end.
-//    (receiver->buckets[(receiver)->countEdgeBucket]).ymax = ym;
-//    (receiver->buckets[(receiver)->countEdgeBucket]).xofymin = (float)xm;
-//    (receiver->buckets[(receiver)->countEdgeBucket]).slopeinverse = slopInv;
-//
-//    // sort the buckets
-//    insertionSort(receiver);
-//
-//    (receiver->countEdgeBucket)++;
-//
-//
-//}
-//
-//void storeEdgeInTable(int x1, int y1, int x2, int y2)
-//{
-//    float m, minv;
-//    int ymaxTS, xwithyminTS, scanline; //ts stands for to store
-//
-//    if (x2 == x1)
-//    {
-//        minv = 0.000000;
-//    }
-//    else
-//    {
-//        m = ((float)(y2 - y1)) / ((float)(x2 - x1));
-//
-//        // horizontal lines are not stored in edge table
-//        if (y2 == y1)
-//            return;
-//
-//        minv = (float)1.0 / m;
-//        //printf("\nSlope string for %d %d & %d %d: %f", x1, y1, x2, y2, minv);
-//    }
-//
-//    if (y1 > y2)
-//    {
-//        scanline = y2;
-//        ymaxTS = y1;
-//        xwithyminTS = x2;
-//    }
-//    else
-//    {
-//        scanline = y1;
-//        ymaxTS = y2;
-//        xwithyminTS = x1;
-//    }
-//    // the assignment part is done..now storage..
-//    storeEdgeInTuple(&EdgeTable[scanline], ymaxTS, xwithyminTS, minv);
-//
-//
-//}
-//
-//void removeEdgeByYmax(EdgeTableTuple* Tup, int yy)
-//{
-//    int i, j;
-//    for (i = 0; i < Tup->countEdgeBucket; i++)
-//    {
-//        if (Tup->buckets[i].ymax == yy)
-//        {
-//            printf("\nRemoved at %d", yy);
-//
-//            for (j = i; j < Tup->countEdgeBucket - 1; j++)
-//            {
-//                Tup->buckets[j].ymax = Tup->buckets[j + 1].ymax;
-//                Tup->buckets[j].xofymin = Tup->buckets[j + 1].xofymin;
-//                Tup->buckets[j].slopeinverse = Tup->buckets[j + 1].slopeinverse;
+//int sortIntersection(vector<Point>& listPoint) {
+//    int numEdge = 0;
+//    for (int i = 0; i < listPoint.size() - 1; i++) {
+//        for (int j = i + 1; j < listPoint.size(); j++) {
+//            if ((abs(listPoint[i].x - listPoint[j].x) < 0.1) && abs(listPoint[i].y - listPoint[j].y) < 0.1) {
+//                listPoint.erase(listPoint.begin() + j);
+//                ++numEdge;
 //            }
-//            Tup->countEdgeBucket--;
-//            i--;
 //        }
 //    }
-//}
-//
-//
-//void updatexbyslopeinv(EdgeTableTuple* Tup)
-//{
-//    int i;
-//
-//    for (i = 0; i < Tup->countEdgeBucket; i++)
-//    {
-//        (Tup->buckets[i]).xofymin = (Tup->buckets[i]).xofymin + (Tup->buckets[i]).slopeinverse;
-//    }
-//}
-//
-//
-//void ScanlineFill()
-//{
-//    /* Follow the following rules:
-//    1. Horizontal edges: Do not include in edge table
-//    2. Horizontal edges: Drawn either on the bottom or on the top.
-//    3. Vertices: If local max or min, then count twice, else count
-//        once.
-//    4. Either vertices at local minima or at local maxima are drawn.*/
-//
-//
-//    int i, j, x1, ymax1, x2, ymax2, FillFlag = 0, coordCount;
-//
-//    // we will start from scanline 0; 
-//    // Repeat until last scanline:
-//    for (i = 0; i < 500; i++)//4. Increment y by 1 (next scan line)
-//    {
-//
-//        // 1. Move from ET bucket y to the
-//        // AET those edges whose ymin = y (entering edges)
-//        for (j = 0; j < EdgeTable[i].countEdgeBucket; j++)
-//        {
-//            storeEdgeInTuple(&ActiveEdgeTuple, EdgeTable[i].buckets[j].
-//                ymax, EdgeTable[i].buckets[j].xofymin,
-//                EdgeTable[i].buckets[j].slopeinverse);
-//        }
-//        //printTuple(&ActiveEdgeTuple);
-//
-//        // 2. Remove from AET those edges for 
-//        // which y=ymax (not involved in next scan line)
-//        removeEdgeByYmax(&ActiveEdgeTuple, i);
-//
-//        //sort AET (remember: ET is presorted)
-//        insertionSort(&ActiveEdgeTuple);
-//
-//        //printTuple(&ActiveEdgeTuple);
-//
-//        //3. Fill lines on scan line y by using pairs of x-coords from AET
-//        j = 0;
-//        FillFlag = 0;
-//        coordCount = 0;
-//        x1 = 0;
-//        x2 = 0;
-//        ymax1 = 0;
-//        ymax2 = 0;
-//        while (j < ActiveEdgeTuple.countEdgeBucket)
-//        {
-//            if (coordCount % 2 == 0)
-//            {
-//                x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
-//                ymax1 = ActiveEdgeTuple.buckets[j].ymax;
-//                if (x1 == x2)
-//                {
-//                    /* three cases can arrive-
-//                        1. lines are towards top of the intersection
-//                        2. lines are towards bottom
-//                        3. one line is towards top and other is towards bottom
-//                    */
-//                    if (((x1 == ymax1) && (x2 != ymax2)) || ((x1 != ymax1) && (x2 == ymax2)))
-//                    {
-//                        x2 = x1;
-//                        ymax2 = ymax1;
-//                    }
-//
-//                    else
-//                    {
-//                        coordCount++;
-//                    }
-//                }
-//
-//                else
-//                {
-//                    coordCount++;
-//                }
+//    for (int i = 0; i < listPoint.size() - 1; i++) {
+//        for (int j = i + 1; j < listPoint.size(); j++) {
+//            if (listPoint[i].x > listPoint[j].x) {
+//                Point tmp = { listPoint[i].x, listPoint[i].y };
+//                listPoint[i].x = listPoint[j].x;
+//                listPoint[i].y = listPoint[j].y;
+//                listPoint[j].x = tmp.x;
+//                listPoint[j].y = tmp.y;
 //            }
-//            else
-//            {
-//                x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
-//                ymax2 = ActiveEdgeTuple.buckets[j].ymax;
+//        }
+//    }
+//    return numEdge;
+//}
+//Point getIntersectionFromLine(Point start1, Point end1, Point start2, Point end2) {
+//    Point res;
+//    float a1 = end1.y - start1.y;
+//    float b1 = start1.x - end1.x;
+//    float c1 = a1 * (start1.x) + b1 * (start1.y);
+//    float a2 = end2.x - start2.x;
+//    float b2 = start2.x - end2.x;
+//    float c2 = a2 * (start2.x) + b2 * (start2.y);
+//    float d = a1 * b2 - a2 * b1;
 //
-//                FillFlag = 0;
+//    if (abs(d) < 0.1) {
+//        res = { -1,-1 };
+//    }
+//    else {
+//        bool intersect = false;
+//        float xInter = (b2 * c1 - b1 * c2) / d;
+//        float yInter = (a1 * c2 - a2 * c1) / d;
+//        float checkX = (xInter - start1.x) * (xInter - end1.x);
+//        float checkY = (yInter - start1.y) * (yInter - end1.y);
 //
-//                // checking for intersection...
-//                if (x1 == x2)
-//                {
-//                    /*three cases can arive-
-//                        1. lines are towards top of the intersection
-//                        2. lines are towards bottom
-//                        3. one line is towards top and other is towards bottom
-//                    */
-//                    if (((x1 == ymax1) && (x2 != ymax2)) || ((x1 != ymax1) && (x2 == ymax2)))
-//                    {
-//                        x1 = x2;
-//                        ymax1 = ymax2;
-//                    }
-//                    else
-//                    {
-//                        coordCount++;
-//                        FillFlag = 1;
-//                    }
-//                }
-//                else
-//                {
-//                    coordCount++;
-//                    FillFlag = 1;
-//                }
-//
-//
-//                if (FillFlag)
-//                {
-//                    //drawing actual lines...
-//                    glColor3f(0.0f, 0.7f, 0.0f);
-//
-//                    glBegin(GL_LINES);
-//                    glVertex2i(x1, i);
-//                    glVertex2i(x2, i);
-//                    glEnd();
-//                    glFlush();
-//
-//                    // printf("\nLine drawn from %d,%d to %d,%d",x1,i,x2,i);
-//                }
-//
+//        if (checkX < 0 && abs(checkX)>1) {
+//            intersect = true;
+//        }
+//        else if (checkX < 0.1) {
+//            if (checkY < 0 && abs(checkY)>1) {
+//                intersect = true;
 //            }
-//
-//            j++;
+//            else if (checkY < 0.1) {
+//                intersect = true;
+//            }
+//            else if (abs(checkX) == 0 && abs(checkY) == 0) {
+//                intersect = true;
+//            }
 //        }
 //
+//        if (intersect) {
+//            res = { xInter, yInter };
+//        }
+//        else res = { -1,-1 };
 //
-//        // 5. For each nonvertical edge remaining in AET, update x for new y
-//        updatexbyslopeinv(&ActiveEdgeTuple);
 //    }
+//    return res;
+//
 //}
-
-
-
-
-
-
-
-
+//vector<Point> Shape::getIntersection(float y, float xMin, float xMax) {
+//    vector<Point> res;
+//    Point startY = { xMin, y };
+//    Point endY = { xMax, y };
+//    for (int i = 0; i < vertice.size(); i++) {
+//        int j = i + 1;
+//        if (j == vertice.size()) {
+//            j = 0;
+//        }
+//        Point tmp = getIntersectionFromLine(vertice[i], vertice[j], startY, endY);
+//        if (tmp.x != -1 && tmp.y != -1) {
+//            res.push_back(tmp);
+//        }
+//    }
+//    return res;
+//}
+//void scanline() {
+//    Shape* shape = getShape();
+//    vector<Point> listOfVertices = shape->getVertice();
+//    Point p1 = shape->getStartPoint();
+//    Point p2 = shape->getEndPoint();
+//    float xMin = p1.x, xMax = p2.x;
+//    float yMin = p1.y, yMax = p2.y;
+//
+//    float yLine = yMin + 1;
+//    while (yLine < yMax) {
+//        vector<Point>inter = shape->getIntersection(yLine, xMin, xMax);
+//        if (inter.size() > 1) {
+//            int count = sortIntersection(inter);
+//            if (count == 0) {
+//                int i = 0;
+//                int j;
+//                while (i < inter.size() && (i != inter.size() - 1)) {
+//                    j = i + 1;
+//                    for (int k = inter[i].x; k <= inter[j].x; k++) {
+//                        putPixel(k, yLine, F_Color_Yellow);
+//                    }
+//                    i = i + 2;
+//
+//                }
+//                glEnd();
+//            }
+//            else {
+//                int i = 0;
+//                int j;
+//                while (i < inter.size() - 1) {
+//                    j = i + 1;
+//                    for (int k = inter[i].x; k <= inter[j].x; k++) {
+//                        putPixel(k, yLine, F_Color_Yellow);
+//                    }
+//                    i = j;
+//                }
+//                glEnd();
+//            }
+//        }
+//        ++yLine;
+//    }
+//    Sleep(100);
+//    glFlush();
+//}
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT);   if (value == 1) {
         return; //glutPostRedisplay();
@@ -710,8 +513,6 @@ void display(void) {
     glFlush();
     //glutPostRedisplay();
 }
-
-
 void mouse(int button, int state, int x, int y) {
 
 
@@ -775,7 +576,6 @@ void mouse(int button, int state, int x, int y) {
             break;
             case id_Line:
             {
-                cout << "duong thang" << endl;
                 Line* tmpLine = new Line();
                 Shape* obj = tmpLine;
                 listOfShape.push_back(obj);
@@ -842,7 +642,7 @@ void mouse(int button, int state, int x, int y) {
             {
                 //boundaryFill(x, y, F_Color, B_Color);
                 floodFill(x, y, O_Color, F_Color_Blue);
-                //ScanlineFill();
+                //scanline();
             }
             break;
             case id_MauDo:
@@ -862,7 +662,6 @@ void mouse(int button, int state, int x, int y) {
     }
     glutPostRedisplay();
 };
-
 void motion(int x, int y) {
     endPoint.x = x;
     endPoint.y = y;
@@ -876,7 +675,6 @@ void init(void) {
     glPointSize(2); //size
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
-
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE);
