@@ -1,3 +1,3 @@
 ﻿  Source.cpp
-D:\KHTN\Semester2-2021\computer graphics\lab\lab3\lab3_openGL\2D-object-Coloring-with-OpenGL\lab03_openGL\lab03_openGL\Source.cpp(329,23): warning C4018: '<': signed/unsigned mismatch
+D:\KHTN\Semester2-2021\computer graphics\lab\lab3\lab3_openGL\2D-object-Coloring-with-OpenGL\lab03_openGL\lab03_openGL\Source.cpp(707,23): warning C4018: '<': signed/unsigned mismatch
   lab03_openGL.vcxproj -> D:\KHTN\Semester2-2021\computer graphics\lab\lab3\lab3_openGL\2D-object-Coloring-with-OpenGL\lab03_openGL\Debug\lab03_openGL.exe

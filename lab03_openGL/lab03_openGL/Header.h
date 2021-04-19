@@ -40,6 +40,15 @@ const int id_DauTru = 72;
 const int id_DauNhan = 73;
 const int id_DauChia = 74;
 
+const int id_MauXanh = 81;
+const int id_MauDo = 82;
+const int id_MauVang = 83;
+const RGBColor O_Color = { 0,0,0 };
+const RGBColor B_Color = { 1,1,1 };
+const RGBColor F_Color_Blue = { 0,0,1 };
+const RGBColor F_Color_Red = { 1,0,0 };
+const RGBColor F_Color_Yellow = { 1,1,0 };
+
 using namespace std;
 
 struct Point {
@@ -75,11 +84,6 @@ vector<Shape*> listOfShape;
 class Line : public Shape {
 public:
 	Line() :Shape() {};
-	/*Line(Shape s) {
-		pstart = s.getStart();
-		pend = s.getEnd();
-	}*/
-	//Line(Point s, Point e) :Shape(s, e) {  };
 	void draw();
 };
 class DaGiacDeu : public Shape {
@@ -193,3 +197,4 @@ public:
 	HinhVuong() :TuGiac() {};
 	void draw();
 };
+//void storeEdgeInTable(int, int, int, int);
